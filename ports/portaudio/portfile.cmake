@@ -11,11 +11,16 @@ vcpkg_from_github(
 string(COMPARE EQUAL "${VCPKG_LIBRARY_LINKAGE}" "dynamic" PA_BUILD_SHARED)
 string(COMPARE EQUAL "${VCPKG_LIBRARY_LINKAGE}" "static" PA_BUILD_STATIC)
 
-# NOTE: the ASIO backend will be built automatically if the ASIO-SDK is provided
-# in a sibling folder of the portaudio source in vcpkg/buildtrees/portaudio/src
+vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
+  FEATURES
+    asio PA_USE_ASIO
+    jack PA_USE_JACK
+)
+
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS
+        ${FEATURE_OPTIONS}
         -DPA_USE_DS=ON
         -DPA_USE_WASAPI=ON
         -DPA_USE_WDMKS=ON
